@@ -12,6 +12,9 @@
 UCLASS()
 class THEEXPANSION_API ATheExpansionGameModeBase : public AGameModeBase
 {
-	GENERATED_BODY()
+    GENERATED_BODY()
+
+  public:
+    ATheExpansionGameModeBase();
 	
 };
