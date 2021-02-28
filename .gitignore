@@ -5,6 +5,12 @@ DerivedDataCache/
 Intermediate/
 Saved/
 Content/TheExpansion/ExternalContent
+
+
+
+
+
+
 *.sln
 .vs/
 
