@@ -58,6 +58,8 @@ void ATEBaseRobot::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
   
     PlayerInputComponent->BindAction("SpeedUp", IE_Pressed, this, &ATEBaseRobot::SpeedUp);
     PlayerInputComponent->BindAction("SpeedUp", IE_Released, this, &ATEBaseRobot::SpeedDown);
+    PlayerInputComponent->BindAction("ScrollUp", IE_Released, this, &ATEBaseRobot::ScrollUp);
+    PlayerInputComponent->BindAction("ScrollDown", IE_Released, this, &ATEBaseRobot::ScrollDown);
 }
 
 void ATEBaseRobot::MoveForward(float Amount)
@@ -84,6 +86,19 @@ void ATEBaseRobot::SpeedDown()
     GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
     WantsToRun = false;
 }
+
+void ATEBaseRobot::ScrollDown()
+{
+    //ArmLength =  abs((ArmLength - 100) % 500)+100;
+ //   SpringArm->TargetArmLength = ArmLength;
+}
+
+void ATEBaseRobot::ScrollUp()
+{
+    
+}
+
+
 
 bool ATEBaseRobot::IsRunning()
 {

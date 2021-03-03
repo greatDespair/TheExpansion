@@ -30,6 +30,8 @@ protected:
     UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
     USpringArmComponent *SpringArm;
 
+    
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement", 
 			  meta=(ClampMin="0.1", ClampMax="10.0"))
     float WalkSpeed = 300.0f;
@@ -42,6 +44,7 @@ protected:
     bool IsRunning();
 
 	bool WantsToRun=false;
+    int ArmLength = 600.0f;
 
 public:	
 	// Called every frame
@@ -57,7 +60,7 @@ private:
     void MoveRight(float Amount);
     void SpeedUp();
     void SpeedDown();
-
-	
+    void ScrollUp();
+    void ScrollDown();
 
 };
