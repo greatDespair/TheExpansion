@@ -7,6 +7,12 @@
 #include"GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TEComponents/TECharacterMovementComponent.h"
+#include "Math/UnrealMathUtility.h"
+#include "GameFramework/NavMovementComponent.h"
+#include "TEComponents/TEEnergyComponent.h"
+
+
+
 
 DEFINE_LOG_CATEGORY_STATIC(Character, All, All)
 
@@ -26,6 +32,7 @@ ATEBaseRobot::ATEBaseRobot(const FObjectInitializer &ObjInit):
     CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
     CameraComponent->SetupAttachment(SpringArm);
     
+    TEEnergyComponent = CreateDefaultSubobject<UTEEnergyComponent>("TEEnergyComponent");
    
 }
 
@@ -40,7 +47,7 @@ void ATEBaseRobot::BeginPlay()
 void ATEBaseRobot::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+    UE_LOG(Character, Warning, TEXT("%f"), GetVelocity().Size());
     
 
 }
@@ -78,6 +85,7 @@ void ATEBaseRobot::SpeedUp()
     
     GetCharacterMovement()->MaxWalkSpeed = RunSpeed ;
     WantsToRun = true;
+   
 }
 
 void ATEBaseRobot::SpeedDown()
@@ -85,17 +93,22 @@ void ATEBaseRobot::SpeedDown()
 
     GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
     WantsToRun = false;
+    
 }
 
 void ATEBaseRobot::ScrollDown()
 {
-    //ArmLength =  abs((ArmLength - 100) % 500)+100;
- //   SpringArm->TargetArmLength = ArmLength;
+    ArmLength += 100;
+    ArmLength = FMath::Clamp<int32>(ArmLength, MinArmLength, MaxArmLength);
+    SpringArm->TargetArmLength = ArmLength;
+
 }
 
 void ATEBaseRobot::ScrollUp()
 {
-    
+    ArmLength -= 100;
+    ArmLength = FMath::Clamp<int32>(ArmLength, MinArmLength, MaxArmLength);
+    SpringArm->TargetArmLength = ArmLength;
 }
 
 
@@ -103,6 +116,7 @@ void ATEBaseRobot::ScrollUp()
 bool ATEBaseRobot::IsRunning()
 {
     
-    return WantsToRun && (GetVelocity().Size() > RunSpeed * 0.8);
+    return WantsToRun && (GetVelocity().Size() >= (RunSpeed * 0.9)) && !GetCharacterMovement()->IsFalling(); //work wrong
+       
    
 }

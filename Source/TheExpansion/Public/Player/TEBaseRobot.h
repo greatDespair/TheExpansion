@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"	
-
+#include "TEComponents/TEEnergyComponent.h"
 #include "TEBaseRobot.generated.h"
 
 class UCameraComponent;
@@ -28,8 +28,17 @@ protected:
     UCameraComponent* CameraComponent;
 
     UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
+    UTEEnergyComponent *TEEnergyComponent;
+    
+
+    UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
     USpringArmComponent *SpringArm;
 
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Movement")
+    int32 MaxArmLength=700;
+
+    UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Movement" )
+    int32 MinArmLength=250;
     
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement", 
@@ -44,7 +53,7 @@ protected:
     bool IsRunning();
 
 	bool WantsToRun=false;
-    int ArmLength = 600.0f;
+    int32 ArmLength = 600.0f;
 
 public:	
 	// Called every frame
