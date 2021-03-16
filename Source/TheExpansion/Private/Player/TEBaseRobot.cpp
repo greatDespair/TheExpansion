@@ -10,8 +10,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/NavMovementComponent.h"
 #include "TEComponents/TEEnergyComponent.h"
-
-
+#include "Components/TextRenderComponent.h"
 
 
 DEFINE_LOG_CATEGORY_STATIC(Character, All, All)
@@ -34,6 +33,13 @@ ATEBaseRobot::ATEBaseRobot(const FObjectInitializer &ObjInit):
     
     TEEnergyComponent = CreateDefaultSubobject<UTEEnergyComponent>("TEEnergyComponent");
    
+    
+	EnergyTextComponent = CreateDefaultSubobject<UTextRenderComponent>("TextComponent");
+   
+    EnergyTextComponent->SetupAttachment(GetRootComponent());
+    
+    TEEnergyComponent->OnDeath.AddUObject(this, &ATEBaseRobot::Death);
+    TEEnergyComponent->EnergyChanged.AddUObject(this, &ATEBaseRobot::OnEnergyChanged);
 }
 
 // Called when the game starts or when spawned
@@ -47,8 +53,8 @@ void ATEBaseRobot::BeginPlay()
 void ATEBaseRobot::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    UE_LOG(Character, Warning, TEXT("%f"), GetVelocity().Size());
     
+       
 
 }
 
@@ -67,6 +73,8 @@ void ATEBaseRobot::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
     PlayerInputComponent->BindAction("SpeedUp", IE_Released, this, &ATEBaseRobot::SpeedDown);
     PlayerInputComponent->BindAction("ScrollUp", IE_Released, this, &ATEBaseRobot::ScrollUp);
     PlayerInputComponent->BindAction("ScrollDown", IE_Released, this, &ATEBaseRobot::ScrollDown);
+
+
 }
 
 void ATEBaseRobot::MoveForward(float Amount)
@@ -102,6 +110,19 @@ void ATEBaseRobot::ScrollDown()
     ArmLength = FMath::Clamp<int32>(ArmLength, MinArmLength, MaxArmLength);
     SpringArm->TargetArmLength = ArmLength;
 
+}
+
+void ATEBaseRobot::Death()
+{
+    GetCharacterMovement()->DisableMovement();
+    
+   
+
+}
+
+void ATEBaseRobot::OnEnergyChanged(float Energy)
+{
+    EnergyTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Energy)));
 }
 
 void ATEBaseRobot::ScrollUp()

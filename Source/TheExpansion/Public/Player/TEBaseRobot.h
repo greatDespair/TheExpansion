@@ -9,6 +9,7 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class UTextRenderComponent;
 
 UCLASS()
 class THEEXPANSION_API ATEBaseRobot : public ACharacter
@@ -27,7 +28,7 @@ protected:
 	UPROPERTY(VisibleAnyWhere,BlueprintReadWrite, Category="Components")
     UCameraComponent* CameraComponent;
 
-    UPROPERTY(VisibleAnyWhere, BlueprintReadWrite, Category = "Components")
+    UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Components")
     UTEEnergyComponent *TEEnergyComponent;
     
 
@@ -35,25 +36,28 @@ protected:
     USpringArmComponent *SpringArm;
 
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Movement")
-    int32 MaxArmLength=700;
+    int32 MaxArmLength=900;
 
     UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "Movement" )
     int32 MinArmLength=250;
     
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement", 
-			  meta=(ClampMin="0.1", ClampMax="10.0"))
+			  meta=(ClampMin="0.1", ClampMax="1000.0"))
     float WalkSpeed = 300.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement",
-              meta = (ClampMin = "0.1", ClampMax = "10.0"))
+              meta = (ClampMin = "0.1", ClampMax = "1000.0"))
     float RunSpeed=600.0f;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Display")
+    UTextRenderComponent *EnergyTextComponent;
 
 	UFUNCTION(BlueprintCallable)
     bool IsRunning();
 
 	bool WantsToRun=false;
-    int32 ArmLength = 600.0f;
+    int32 ArmLength = 900.0f;
 
 public:	
 	// Called every frame
@@ -62,6 +66,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+    void Death();
+    void OnEnergyChanged(float Energy);
 	
 
 private:
@@ -71,5 +77,5 @@ private:
     void SpeedDown();
     void ScrollUp();
     void ScrollDown();
-
+    
 };
